@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body{
+  /*
+  background: rgb(2,0,36);
+  background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(0,0,119,1) 25%, rgba(20,108,215,1) 67%, rgba(0,185,223,1) 100%); 
+  */
+  background-image: url("./assets/wallpaper.png");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: top; 
+}
