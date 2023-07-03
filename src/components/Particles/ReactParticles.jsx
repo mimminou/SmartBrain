@@ -1,7 +1,6 @@
 import { useCallback } from "react";
 import Particles from "react-particles";
 import { loadFull } from "tsparticles";
-import { ZIndex } from "tsparticles-engine";
 
 const ReactParticles = () => {
     const particlesInit = useCallback(async engine => {
