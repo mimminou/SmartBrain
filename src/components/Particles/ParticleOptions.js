@@ -48,7 +48,7 @@
                     outModes: {
                         default: "bounce",
                     },
-                    random: false,
+                    random: true,
                     speed: 3,
                     straight: false,
                 },
