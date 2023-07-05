@@ -21,7 +21,7 @@ function App() {
     setImageShown(true)
     if (result.status == "success"){
       console.log("success")
-      //get response and add the rectangle to the image in here
+      //get response and only harvest the data we need
       const resultImgData = {
         imgWidth : result.photos[0].width,
         imgHeight : result.photos[0].height,
