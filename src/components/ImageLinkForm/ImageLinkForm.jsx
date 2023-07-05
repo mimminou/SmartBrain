@@ -41,9 +41,7 @@ const RemoveImgButton = ({imgShown, resetInput}) =>{
      <button className="flex items-center px-4 py-2 font-bold text-white bg-red-500 rounded h-[40px] active:bg-red-800 hover:bg-red-700" onClick={()=> resetInput()}>🗙</button>
   )
   }
-  return(
-    null
-  )
+  return null
 }
 
 export default ImageLinkForm;
