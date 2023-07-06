@@ -23,7 +23,7 @@
                         quantity: 4,
                     },
                     repulse: {
-                        distance: 100,
+                        distance: 50,
                         duration: 0.4,
                     },
                 },
@@ -34,7 +34,7 @@
                 },
                 links: {
                     color: "#ffffff",
-                    distance: 200,
+                    distance: 150,
                     enable: true,
                     opacity: 0.5,
                     width: 1,
@@ -49,7 +49,7 @@
                         default: "bounce",
                     },
                     random: true,
-                    speed: 3,
+                    speed: 1,
                     straight: false,
                 },
                 number: {
@@ -57,7 +57,7 @@
                         enable: true,
                         area: 800,
                     },
-                    value: 25,
+                    value: 60,
                 },
                 opacity: {
                     value: 0.5,
@@ -66,7 +66,7 @@
                     type: "circle",
                 },
                 size: {
-                    value: { min: 1, max: 5 },
+                    value: { min: 0, max: 2 },
                 },
             },
             detectRetina: true,

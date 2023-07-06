@@ -8,6 +8,7 @@ import FaceDetectionAPI from './components/ImageHandler/ImageHandler'
 import FaceRecognition from './components/FaceRecognition/FaceRecognition'
 import { useState } from 'react'
 import ApiInput from './components/ApiAccess/ApiAccess'
+import SignIn from './components/Signin/SignIn'
 
 function App() {
   const [isLoading, setIsLoading] = useState(false)
@@ -16,6 +17,7 @@ function App() {
   const [imgData, setImgData] = useState({})
   const [apiKey, setApiKey] = useState("")
   const [apiSecret, setApiSecret] = useState("")
+  const [route, setRoute] = useState("SignIn")
 
   const onSubmit = async (imgURL) => {
     const result = await FaceDetectionAPI(imgURL, apiKey, apiSecret)
@@ -52,15 +54,22 @@ function App() {
   }
 
   return (
-    <>
+    <div className="flex flex-col flex-1 justify-center items-center">
       <ReactParticles/>
-      {/*<Navigation/> component not yet done, requires Backend*/}
-      <Logo/>
-      <ApiInput setApiKey={setApiKey} setApiSecret={setApiSecret}/>
-      {/*<Rank/> component not yet done, require backend*/}
-      <ImageLinkForm onSubmit={onSubmit} isLoading={isLoading} setIsLoading={setIsLoading} imgShown={imageShown} cleanUp={cleanUp}/>
-      <FaceRecognition imgURL={imgURL} imgData={imgData} />
-    </>
+      {route === "SignIn" 
+        ?
+        <SignIn setRoute={setRoute} />
+        :
+      <>
+        <Navigation route={route} setRoute={setRoute}/>
+        <Logo/>
+        <ApiInput setApiKey={setApiKey} setApiSecret={setApiSecret}/>
+        {/*<Rank/> component not yet done, require backend*/}
+        <ImageLinkForm onSubmit={onSubmit} isLoading={isLoading} setIsLoading={setIsLoading} imgShown={imageShown} cleanUp={cleanUp}/>
+        <FaceRecognition imgURL={imgURL} imgData={imgData} />
+        </>
+      }
+    </div>
   )
 }
 
