@@ -11,6 +11,7 @@ import ApiInput from './components/ApiAccess/ApiAccess'
 import SignIn from './components/Signin/SignIn'
 import Register from './components/Register/Register'
 import { Container } from './components/misc/Container'
+
 function App() {
   const [isLoading, setIsLoading] = useState(false)
   const [imageShown, setImageShown] = useState(false)
@@ -55,7 +56,7 @@ function App() {
     setImageShown(false)
   }
 
- // switch case just for fun, normally would be done with an if else
+ // switch case just for fun, normally would be done with an if else, but switch looks somehow more readable here 
   switch (route) {
     case "SignIn":
       return (
