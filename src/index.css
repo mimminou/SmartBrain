@@ -12,3 +12,11 @@ body{
   background-attachment: fixed;
   background-position: top; 
 }
+
+#root{
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  
+}

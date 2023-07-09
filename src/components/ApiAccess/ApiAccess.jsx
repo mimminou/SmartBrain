@@ -1,5 +1,4 @@
 const ApiInput = ({setApiKey, setApiSecret}) => {
-
     return (
         <div className="flex flex-col justify-center items-center font-bold text-white">
             <p className="text-center">In order for this app to work, you need to provide an API key and a secret key, easiely obtainable from skybiometry.com upon creating an account </p>
@@ -8,5 +7,4 @@ const ApiInput = ({setApiKey, setApiSecret}) => {
         </div>
     )
 }
-
 export default ApiInput

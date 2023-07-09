@@ -2,14 +2,15 @@ import './App.css'
 import Navigation from "./components/Navigation/Navigation"
 import Logo from './components/Logo/Logo'
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm'
-import Rank from './components/Rank/Rank'
+import Rank from './components/Rank/Rank' // not ready yet, required backend
 import ReactParticles from "./components/Particles/ReactParticles"
 import FaceDetectionAPI from './components/ImageHandler/ImageHandler'
 import FaceRecognition from './components/FaceRecognition/FaceRecognition'
 import { useState } from 'react'
 import ApiInput from './components/ApiAccess/ApiAccess'
 import SignIn from './components/Signin/SignIn'
-
+import Register from './components/Register/Register'
+import { Container } from './components/misc/Container'
 function App() {
   const [isLoading, setIsLoading] = useState(false)
   const [imageShown, setImageShown] = useState(false)
@@ -31,6 +32,7 @@ function App() {
     }
     else {
       console.log("failed, no face was detected")
+      console.log(result)
       setImgData({})
       //inform user that no face was detected in here
     }
@@ -53,24 +55,38 @@ function App() {
     setImageShown(false)
   }
 
-  return (
-    <div className="flex flex-col flex-1 justify-center items-center">
-      <ReactParticles/>
-      {route === "SignIn" 
-        ?
-        <SignIn setRoute={setRoute} />
-        :
-      <>
-        <Navigation route={route} setRoute={setRoute}/>
-        <Logo/>
-        <ApiInput setApiKey={setApiKey} setApiSecret={setApiSecret}/>
-        {/*<Rank/> component not yet done, require backend*/}
-        <ImageLinkForm onSubmit={onSubmit} isLoading={isLoading} setIsLoading={setIsLoading} imgShown={imageShown} cleanUp={cleanUp}/>
-        <FaceRecognition imgURL={imgURL} imgData={imgData} />
-        </>
-      }
-    </div>
-  )
+ // switch case just for fun, normally would be done with an if else
+  switch (route) {
+    case "SignIn":
+      return (
+        <Container styling={"h-[100vh]"}>
+          <SignIn setRoute={setRoute}/>
+          <ReactParticles/>
+        </Container>
+          )
+      
+    case "Register":
+      return (
+        <Container styling={"h-[100vh]"}>
+          <Register setRoute={setRoute}/>
+          <ReactParticles/>
+        </Container>
+      )
+
+    case "Home":
+      return (
+        <div>
+          <Container props>
+            <Navigation route={route} setRoute={setRoute}/>
+            <Logo/>
+            <ApiInput setApiKey={setApiKey} setApiSecret={setApiSecret}/>
+            <ImageLinkForm onSubmit={onSubmit} isLoading={isLoading} setIsLoading={setIsLoading} imgShown={imageShown} cleanUp={cleanUp}/>
+            <FaceRecognition imgURL={imgURL} imgData={imgData} />
+          </Container>
+          <ReactParticles/>
+        </div>
+      )
+  }
 }
 
 export default App
