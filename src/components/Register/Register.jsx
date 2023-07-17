@@ -1,7 +1,25 @@
-
 import BrainSVG from "../../assets/brain.svg"
+import { SERVER } from "../misc/Globals"
 const Register = ({setRoute}) => {
 
+    const RegisterUser = async (event) => {
+      event.preventDefault()
+      const {name, email, password} = event.target.elements
+      const response = (await fetch(SERVER + "/Register",{
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+          },
+        body: JSON.stringify({
+            "Email" : email.value,
+            "Name" : name.value,
+            "Pw" : password.value
+        })
+      }))
+      const jsonResponse = await response.json()
+      console.log(jsonResponse)
+      setRoute("SignIn")
+    }
     return (
     <div className="flex justify-center items-center w-[50vw] h-[80vh]">
         <div className="flex flex-col flex-1 items-center justify-center backdrop-blur-sm mt-2 px-6 py-12 shadow-2xl bg-blue-950 rounded-xl bg-opacity-40 min-w-[350px] max-w-[50%] g:px-8">
@@ -17,7 +35,7 @@ const Register = ({setRoute}) => {
             </div>
 
             <div className="mt-10 sm:w-full">
-            <form className="space-y-6" action="#" method="POST">
+            <form className="space-y-6" action="#" method="POST" onSubmit={RegisterUser}>
                  <div>
                     <label htmlFor="name" className="block text-sm font-medium leading-6 text-white">
                         Name
@@ -70,7 +88,6 @@ const Register = ({setRoute}) => {
                 <button
                     type="submit"
                     className="flex w-full justify-center rounded-md bg-blue-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    onClick={()=> setRoute("SignIn")}
                 >
                     Register
                 </button>

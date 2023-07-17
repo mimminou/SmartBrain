@@ -1,5 +1,33 @@
 import BrainSVG from "../../assets/brain.svg"
+import { SERVER } from "../misc/Globals"
+
 const SignIn = ({setRoute}) => {
+    const SignInUser = async (event) => {
+        event.preventDefault()
+        const {email, password} = event.target.elements
+        const response = (await fetch(SERVER + "/SignIn",{
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+            },
+        credentials: "include",
+        body: JSON.stringify({
+            "Email" : email.value,
+            "Pw" : password.value
+        })
+        }))
+        const jsonResponse = await response.json()
+        console.log(jsonResponse)
+        if (jsonResponse.route === "home"){
+            await fetch(SERVER + "/Validate",{
+                headers: {
+                    "Content-Type": "application/json",
+                    },
+                credentials: "include"
+                })
+            setRoute("Home")
+        }
+    }
 
     return (
     <div className="flex justify-center items-center w-[50vw] self-center h-[80vh]">
@@ -16,7 +44,7 @@ const SignIn = ({setRoute}) => {
             </div>
 
             <div className="mt-10 sm:w-full">
-            <form className="space-y-6" action="#" method="POST">
+            <form className="space-y-6" action="#" method="POST" onSubmit={SignInUser}>
                 <div>
                 <label htmlFor="email" className="block text-sm font-medium leading-6 text-white">
                     Email address
@@ -55,7 +83,6 @@ const SignIn = ({setRoute}) => {
                 <button
                     type="submit"
                     className="flex w-full justify-center rounded-md bg-blue-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    onClick={()=> setRoute("Home")}
                 >
                     Sign in
                 </button>

@@ -11,6 +11,7 @@ import ApiInput from './components/ApiAccess/ApiAccess'
 import SignIn from './components/Signin/SignIn'
 import Register from './components/Register/Register'
 import { Container } from './components/misc/Container'
+import DevButton from './components/misc/DevComponents'
 
 function App() {
   const [isLoading, setIsLoading] = useState(false)
@@ -58,6 +59,14 @@ function App() {
 
  // switch case just for fun, normally would be done with an if else, but switch looks somehow more readable here 
   switch (route) {
+    case "Dev":
+      return (
+        <Container styling={"h-[100vh]"}>
+          <DevButton/>
+          <ReactParticles/>
+        </Container>
+          )
+
     case "SignIn":
       return (
         <Container styling={"h-[100vh]"}>
@@ -81,6 +90,7 @@ function App() {
             <Navigation route={route} setRoute={setRoute}/>
             <Logo/>
             <ApiInput setApiKey={setApiKey} setApiSecret={setApiSecret}/>
+            <Rank/>
             <ImageLinkForm onSubmit={onSubmit} isLoading={isLoading} setIsLoading={setIsLoading} imgShown={imageShown} cleanUp={cleanUp}/>
             <FaceRecognition imgURL={imgURL} imgData={imgData} />
           </Container>
