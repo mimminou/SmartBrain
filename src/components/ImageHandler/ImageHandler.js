@@ -1,3 +1,5 @@
+import { SERVER } from "../misc/Globals";
+
 async function FaceDetectionAPI(url, api_key, api_secret){
     const urlParams = new URLSearchParams({
         api_key : api_key,
@@ -15,4 +17,24 @@ async function FaceDetectionAPI(url, api_key, api_secret){
     }
 }
 
-export default FaceDetectionAPI
+async function LocalFaceDetectionAPI(ImgURL){
+    try{
+        const response = await fetch(SERVER + "/DetectFaces",{
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"},
+                credentials : "include",
+                body: JSON.stringify({
+                    "IMG" : ImgURL 
+                })
+        })
+        const result = await response.json()
+        return result
+    }
+    catch(error){
+        return error
+    }
+}
+
+
+export {FaceDetectionAPI, LocalFaceDetectionAPI}

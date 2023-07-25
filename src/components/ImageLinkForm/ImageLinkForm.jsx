@@ -25,6 +25,7 @@ const ImageLinkForm = ({onSubmit, isLoading, setIsLoading, imgShown, cleanUp}) =
           <input type="text" ref={inputRef} onChange={(event)=>{setInputText(event.target.value)}} autoFocus value={inputText} placeholder="Image url" className="p-2 w-[25vw] font-bold rounded max-w-[500px]"/>
           <button type="submit" onClick={(event)=> {
             event.preventDefault()
+            cleanUp()
             onSubmit(inputText)
             setIsLoading(true)
           }}

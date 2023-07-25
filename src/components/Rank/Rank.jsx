@@ -1,22 +1,21 @@
-import { useEffect, useState } from "react";
+import { useEffect, } from "react";
 import { SERVER } from "../misc/Globals"
 
-const Rank  = () => {    
-const [rank, setRank] = useState(0);
-   
+const Rank  = ({rank, setRank}) => {
     useEffect(()=>{
-      getRank()
-    },[])
-    const getRank = async () => {
-      const response = await fetch(SERVER + "/GetRank",{
+      const getRank = async () => {
+        const response = await fetch(SERVER + "/GetRank",{
                 headers: {
                     "Content-Type": "application/json"
                     },
                     credentials : "include"
                 })
-      const jsonResponse = await response.json()
-      setRank(jsonResponse.rank)
-    }
+        const jsonResponse = await response.json()
+        jsonResponse.Rank === "0" ? setRank("Unranked") : setRank(jsonResponse.rank)
+    } 
+      getRank()
+    },[])
+
     return (
     <nav className="flex flex-col justify-center items-center m-4 text-gray-50">
       <p className="font-bold">{"Your rank is : "}</p>

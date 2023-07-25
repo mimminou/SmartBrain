@@ -18,7 +18,6 @@ const DevButton = () => {
     const validateUserDev = async() => {
         await fetch(SERVER + "/Validate",{
             headers: {
-
                 "Content-Type": "application/json",
                 },
             credentials: "include"

@@ -4,11 +4,11 @@ import Logo from './components/Logo/Logo'
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm'
 import Rank from './components/Rank/Rank' // not ready yet, required backend
 import ReactParticles from "./components/Particles/ReactParticles"
-import FaceDetectionAPI from './components/ImageHandler/ImageHandler'
+import { FaceDetectionAPI, LocalFaceDetectionAPI } from './components/ImageHandler/ImageHandler'
 import FaceRecognition from './components/FaceRecognition/FaceRecognition'
 import { useState } from 'react'
 import ApiInput from './components/ApiAccess/ApiAccess'
-import SignIn from './components/Signin/SignIn'
+import {SignIn, ValidateUser} from './components/Signin/SignIn'
 import Register from './components/Register/Register'
 import { Container } from './components/misc/Container'
 import DevButton from './components/misc/DevComponents'
@@ -18,19 +18,20 @@ function App() {
   const [imageShown, setImageShown] = useState(false)
   const [imgURL, setImgURL] = useState("")
   const [imgData, setImgData] = useState({})
-  const [apiKey, setApiKey] = useState("")
-  const [apiSecret, setApiSecret] = useState("")
-  const [route, setRoute] = useState("SignIn")
+  //const [apiKey, setApiKey] = useState("")
+  //const [apiSecret, setApiSecret] = useState("")
+  const [route, setRoute] = useState("Validate")
+  const [rank, setRank] = useState(0)
 
   const onSubmit = async (imgURL) => {
-    const result = await FaceDetectionAPI(imgURL, apiKey, apiSecret)
+    const result = await LocalFaceDetectionAPI(imgURL)
     setIsLoading(false)
     setImgURL(imgURL)
     setImageShown(true)
-    if (result.status == "success"){
+    if (result.response.status == "success"){
       console.log("success")
       //get response and only harvest the data we need
-      setImgData(ParseResults(result))
+      setImgData(LocalParseResults(result))
     }
     else {
       console.log("failed, no face was detected")
@@ -38,6 +39,15 @@ function App() {
       setImgData({})
       //inform user that no face was detected in here
     }
+  }
+
+  const LocalParseResults = (resultJSON) => {
+    const imgprops = {w : resultJSON.response.imgSize.w, h : resultJSON.response.imgSize.h}
+    const faces = resultJSON.response.faces
+    faces.forEach((face, index) =>{
+      faces[index] = {center : {x :face.centerX, y : face.centerY}, w : face.width, h : face.height}
+    })
+    return {img : imgprops, faces : faces}
   }
 
   const ParseResults = (resultJSON) => {
@@ -67,6 +77,10 @@ function App() {
         </Container>
           )
 
+    case "Validate":
+      ValidateUser(setRoute)
+      break
+
     case "SignIn":
       return (
         <Container styling={"h-[100vh]"}>
@@ -87,12 +101,11 @@ function App() {
       return (
         <div>
           <Container props>
-            <Navigation route={route} setRoute={setRoute}/>
+            <Navigation setRoute={setRoute}/>
             <Logo/>
-            <ApiInput setApiKey={setApiKey} setApiSecret={setApiSecret}/>
-            <Rank/>
+            <Rank rank={rank} setRank={setRank}/>
             <ImageLinkForm onSubmit={onSubmit} isLoading={isLoading} setIsLoading={setIsLoading} imgShown={imageShown} cleanUp={cleanUp}/>
-            <FaceRecognition imgURL={imgURL} imgData={imgData} />
+            <FaceRecognition imgURL={imgURL} imgData={imgData} setRank={setRank} />
           </Container>
           <ReactParticles/>
         </div>

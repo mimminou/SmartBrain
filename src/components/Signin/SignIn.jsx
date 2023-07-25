@@ -18,14 +18,8 @@ const SignIn = ({setRoute}) => {
         }))
         const jsonResponse = await response.json()
         console.log(jsonResponse)
-        if (jsonResponse.route === "home"){
-            await fetch(SERVER + "/Validate",{
-                headers: {
-                    "Content-Type": "application/json",
-                    },
-                credentials: "include"
-                })
-            setRoute("Home")
+        if (jsonResponse.route === "Validate"){
+            setRoute("Validate")
         }
     }
 
@@ -101,4 +95,23 @@ const SignIn = ({setRoute}) => {
     )
 }
 
-export default SignIn
+const ValidateUser = async (setRoute) => {
+            const validationRequest = await fetch(SERVER + "/Validate",{
+                headers: {
+                    "Content-Type": "application/json",
+                    },
+                credentials: "include"
+                })
+            const responseData = await validationRequest.json()
+            console.log(responseData.message)
+            if (responseData.message === "VALID"){
+                setRoute("Home")
+            }
+            else{
+                setRoute("SignIn")
+                console.log("Please verify your cookies settings")
+            }
+}
+
+
+export {SignIn, ValidateUser}
