@@ -103,11 +103,14 @@ const SignIn = ({setRoute}) => {
 }
 
 const ValidateUser = async (setRoute) => {
+            const controller = new AbortController()
+            const timeout = setTimeout(() => controller.abort(), 5000)
             const validationRequest = await fetch(SERVER + "/Validate",{
                 headers: {
                     "Content-Type": "application/json",
                     },
-                credentials: "include"
+                credentials: "include",
+                signal: controller.signal,
                 }).catch(()=> {
                     console.log("server down")
                     toast.error("Backend Down")
@@ -115,6 +118,7 @@ const ValidateUser = async (setRoute) => {
                     return
                 })
             const responseData = await validationRequest.json()
+            clearTimeout(timeout)
             console.log(responseData.message)
             if (responseData.message === "VALID"){
                 toast.info("Signed In")
