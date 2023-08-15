@@ -1,0 +1,11 @@
+.modalDialog {
+    z-index: 999;
+    position: absolute;
+    left: 50%;
+    right: 0;
+    top: 50%;
+    bottom: 0;
+    margin: 0;
+    padding: 0;
+    transform: translate(-50%, -50%);
+}

@@ -1,0 +1,21 @@
+/* toastify-styles.css */
+.Toastify__toast {
+    color: aliceblue;
+    font-weight: bold;
+  }
+
+  .Toastify__toast--default {
+    background-color: #2b72ff;
+}
+.Toastify__toast--info {
+    background-color: #0089FC;
+}
+.Toastify__toast--success {
+    background-color: #72FF6C;
+}
+.Toastify__toast--warning {
+    background-color: #2b72ff;
+}
+.Toastify__toast--error {
+    background-color: #FF4647;
+}

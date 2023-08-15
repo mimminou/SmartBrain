@@ -1,11 +1,11 @@
 import BrainSVG from "../../assets/brain.svg"
 import { SERVER } from "../misc/Globals"
-
+import { toast } from "react-toastify"
 const SignIn = ({setRoute}) => {
     const SignInUser = async (event) => {
         event.preventDefault()
         const {email, password} = event.target.elements
-        const response = (await fetch(SERVER + "/SignIn",{
+        const response = await fetch(SERVER + "/SignIn",{
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -15,11 +15,18 @@ const SignIn = ({setRoute}) => {
             "Email" : email.value,
             "Pw" : password.value
         })
-        }))
+        }).catch(()=> {
+            toast.error("Backend Down")
+            return
+        })
         const jsonResponse = await response.json()
         console.log(jsonResponse)
         if (jsonResponse.route === "Validate"){
             setRoute("Validate")
+        }
+        else {
+            console.log(jsonResponse)
+            toast.error("Username and/or Password incorrect")
         }
     }
 
@@ -84,7 +91,7 @@ const SignIn = ({setRoute}) => {
             </form>
 
             <p className="mt-10 text-sm text-center text-gray-500">
-                Not registered yet?{' '}
+                Not registered yet? &nbsp;
                 <a href="#" onClick={()=> setRoute("Register")} className="text-xl font-semibold leading-6 text-blue-600 hover:text-blue-500">
                 Register now!
                 </a>
@@ -101,17 +108,21 @@ const ValidateUser = async (setRoute) => {
                     "Content-Type": "application/json",
                     },
                 credentials: "include"
+                }).catch(()=> {
+                    console.log("server down")
+                    toast.error("Backend Down")
+                    setRoute("SignIn")
+                    return
                 })
             const responseData = await validationRequest.json()
             console.log(responseData.message)
             if (responseData.message === "VALID"){
+                toast.info("Signed In")
                 setRoute("Home")
             }
             else{
                 setRoute("SignIn")
-                console.log("Please verify your cookies settings")
             }
 }
-
 
 export {SignIn, ValidateUser}

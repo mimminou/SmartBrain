@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import { SERVER } from "../misc/Globals";
 
 async function FaceDetectionAPI(url, api_key, api_secret){
@@ -13,6 +14,7 @@ async function FaceDetectionAPI(url, api_key, api_secret){
         const result = await response.json();
         return result
     } catch (error) {
+        toast.error("Backend error")
         return error
     }
 }
@@ -32,6 +34,7 @@ async function LocalFaceDetectionAPI(ImgURL){
         return result
     }
     catch(error){
+        toast.error("Backend Error")
         return error
     }
 }

@@ -6,12 +6,13 @@ import Rank from './components/Rank/Rank' // not ready yet, required backend
 import ReactParticles from "./components/Particles/ReactParticles"
 import { FaceDetectionAPI, LocalFaceDetectionAPI } from './components/ImageHandler/ImageHandler'
 import FaceRecognition from './components/FaceRecognition/FaceRecognition'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import ApiInput from './components/ApiAccess/ApiAccess'
 import {SignIn, ValidateUser} from './components/Signin/SignIn'
 import Register from './components/Register/Register'
 import { Container } from './components/misc/Container'
 import DevButton from './components/misc/DevComponents'
+import { toast } from 'react-toastify';
 
 function App() {
   const [isLoading, setIsLoading] = useState(false)
@@ -35,6 +36,7 @@ function App() {
     }
     else {
       console.log("failed, no face was detected")
+      toast.warning("Failed, could not detect faces")
       console.log(result)
       setImgData({})
       //inform user that no face was detected in here
@@ -73,7 +75,6 @@ function App() {
       return (
         <Container styling={"h-[100vh]"}>
           <DevButton/>
-          <ReactParticles/>
         </Container>
           )
 
@@ -85,7 +86,6 @@ function App() {
       return (
         <Container styling={"h-[100vh]"}>
           <SignIn setRoute={setRoute}/>
-          <ReactParticles/>
         </Container>
           )
       
@@ -93,7 +93,6 @@ function App() {
       return (
         <Container styling={"h-[100vh]"}>
           <Register setRoute={setRoute}/>
-          <ReactParticles/>
         </Container>
       )
 
@@ -107,7 +106,6 @@ function App() {
             <ImageLinkForm onSubmit={onSubmit} isLoading={isLoading} setIsLoading={setIsLoading} imgShown={imageShown} cleanUp={cleanUp}/>
             <FaceRecognition imgURL={imgURL} imgData={imgData} setRank={setRank} />
           </Container>
-          <ReactParticles/>
         </div>
       )
   }
