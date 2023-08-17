@@ -24,9 +24,13 @@ const SignIn = ({setRoute}) => {
         if (jsonResponse.route === "Validate"){
             setRoute("Validate")
         }
-        else {
+        else if (jsonResponse.err==="INVALID"){
             console.log(jsonResponse)
             toast.error("Username and/or Password incorrect")
+        }
+        else{
+            console.log(jsonResponse)
+            toast.error("Backend error")
         }
     }
 
@@ -91,7 +95,7 @@ const SignIn = ({setRoute}) => {
             </form>
 
             <p className="mt-10 text-sm text-center text-gray-500">
-                Not registered yet? &nbsp;
+                {"Don't"} have an account ? &nbsp;
                 <a href="#" onClick={()=> setRoute("Register")} className="text-xl font-semibold leading-6 text-blue-600 hover:text-blue-500">
                 Register now!
                 </a>

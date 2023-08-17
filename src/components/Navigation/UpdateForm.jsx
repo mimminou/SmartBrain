@@ -1,21 +1,20 @@
-import { useContext, useState } from "react"
-import { SERVER } from "../misc/Globals"
+import { useContext, useEffect, useRef, useState } from "react"
+import { SERVER, btnStyleBlue, btnStyleRed } from "../misc/Globals"
 import { toast } from "react-toastify"
-import { ModalContext } from "../Contexts/ModalContext"
 import { Modal } from "../misc/Modal"
+import { ModalContext } from "../Contexts/ModalContext"
 
 const UpdateForm = (props) => {
     const [name, setName] = useState("")
     const [pw, setPw] = useState("")
-    const {modalClosed, setModalClosed} = useContext(ModalContext)
-    console.log(modalClosed)
-    if (!modalClosed)
+    const {isVisible, setIsVisible} = useContext(ModalContext)
+    
     return (
-        <Modal>
+        <Modal >
         <form className="space-y-6 w-full" action="#" method="POST" onSubmit={(event)=> {
             event.preventDefault()
-            UpdateAccount(props.setRoute, name, pw, setModalClosed )}}>
-                <div>
+            UpdateAccount(props.setRoute, name, pw, setIsVisible)}}>
+                <div >
                     <label htmlFor="email" className="block text-sm font-medium leading-6 text-white">
                         Email
                     </label>
@@ -53,17 +52,19 @@ const UpdateForm = (props) => {
                 <div>
                 <button
                     type="submit"
-                    className="flex w-full justify-center rounded-md bg-blue-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                >
+                    className={btnStyleBlue}>
                     Update
                 </button>
+                <button className={btnStyleRed} onClick={(e)=> {
+                    e.preventDefault()
+                    setIsVisible(false)}}>Discard</button>
                 </div>
             </form>
         </Modal>
     )
 }
 
-const UpdateAccount = async (setRoute, Email, Pw, setModalClosed) =>{
+const UpdateAccount = async (setRoute, Email, Pw, setIsVisible) =>{
     const validationRequest = await fetch(SERVER + "/UpdateUser",{
                 method: "POST",
                 headers: {
@@ -82,12 +83,12 @@ const UpdateAccount = async (setRoute, Email, Pw, setModalClosed) =>{
             const responseData = await validationRequest.json()
             console.log(responseData.message)
             if (responseData.message === "Updated"){
-              toast.info("Account Updated, You will be logged out shortly")
-              setModalClosed(true)
+                toast.info("Account Updated, You will be logged out shortly")
+                setIsVisible(false)
 
-              await setTimeout(()=>{
-                setRoute("SignIn")
-              },3000)
-            }
+                await setTimeout(()=>{
+                    setRoute("SignIn")
+                },3000)
+                }
 }
 export default UpdateForm

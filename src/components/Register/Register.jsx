@@ -1,11 +1,13 @@
+import { toast } from "react-toastify"
 import BrainSVG from "../../assets/brain.svg"
-import { SERVER } from "../misc/Globals"
+import { SERVER, btnStyleBlue} from "../misc/Globals"
 const Register = ({setRoute}) => {
+
 
     const RegisterUser = async (event) => {
       event.preventDefault()
       const {name, email, password} = event.target.elements
-      const response = (await fetch(SERVER + "/Register",{
+      const response = await fetch(SERVER + "/Register",{
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -15,10 +17,20 @@ const Register = ({setRoute}) => {
             "Name" : name.value,
             "Pw" : password.value
         })
-      }))
+      }).catch(()=>{
+        console.log("error occured")
+        toast.error("An Error has occured")
+      })
       const jsonResponse = await response.json()
       console.log(jsonResponse)
-      setRoute("SignIn")
+      if(jsonResponse.message === "SUCCESS")
+        setRoute("SignIn")
+      else if (jsonResponse.err === "DUPACC"){
+        toast.error("Email Already registered please try another one")
+      }
+      else {
+        toast.error("Server error")
+      }
     }
     return (
     <div className="flex justify-center items-center w-[50vw] h-[80vh]">
@@ -87,9 +99,14 @@ const Register = ({setRoute}) => {
                 <div>
                 <button
                     type="submit"
-                    className="flex w-full justify-center rounded-md bg-blue-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    className={btnStyleBlue}
                 >
                     Register
+                </button>
+                <button
+                    className={btnStyleBlue}
+                    onClick={()=> setRoute("SignIn")}>
+                    Already have an account ? Login
                 </button>
                 </div>
             </form>
