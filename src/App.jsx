@@ -2,7 +2,6 @@ import './App.css'
 import Navigation from "./components/Navigation/Navigation"
 import Logo from './components/Logo/Logo'
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm'
-import Rank from './components/Rank/Rank' // not ready yet, required backend
 import ReactParticles from "./components/Particles/ReactParticles"
 import { FaceDetectionAPI, LocalFaceDetectionAPI } from './components/ImageHandler/ImageHandler'
 import FaceRecognition from './components/FaceRecognition/FaceRecognition'
@@ -13,6 +12,7 @@ import Register from './components/Register/Register'
 import { Container } from './components/misc/Container'
 import DevButton from './components/misc/DevComponents'
 import { toast } from 'react-toastify';
+import {Points, getPoints} from './components/Points/Points'
 
 function App() {
   const [isLoading, setIsLoading] = useState(false)
@@ -22,7 +22,7 @@ function App() {
   //const [apiKey, setApiKey] = useState("")
   //const [apiSecret, setApiSecret] = useState("")
   const [route, setRoute] = useState("Validate")
-  const [rank, setRank] = useState(0)
+  const [points, setPoints] = useState(0)
 
   const onSubmit = async (imgURL) => {
     const result = await LocalFaceDetectionAPI(imgURL)
@@ -79,7 +79,7 @@ function App() {
           )
 
     case "Validate":
-      ValidateUser(setRoute)
+      ValidateUser(setRoute, setPoints)
       break
 
     case "SignIn":
@@ -102,9 +102,9 @@ function App() {
           <Container props>
             <Navigation setRoute={setRoute}/>
             <Logo/>
-            <Rank rank={rank} setRank={setRank}/>
+            <Points points={points} setPoints={setPoints}/>
             <ImageLinkForm onSubmit={onSubmit} isLoading={isLoading} setIsLoading={setIsLoading} imgShown={imageShown} cleanUp={cleanUp}/>
-            <FaceRecognition imgURL={imgURL} imgData={imgData} setRank={setRank} />
+            <FaceRecognition imgURL={imgURL} imgData={imgData} points={points} setPoints={setPoints} />
           </Container>
         </div>
       )

@@ -1,6 +1,8 @@
 import BrainSVG from "../../assets/brain.svg"
 import { SERVER } from "../misc/Globals"
 import { toast } from "react-toastify"
+import { getPoints } from "../Points/Points"
+
 const SignIn = ({setRoute}) => {
     const SignInUser = async (event) => {
         event.preventDefault()
@@ -106,7 +108,7 @@ const SignIn = ({setRoute}) => {
     )
 }
 
-const ValidateUser = async (setRoute) => {
+const ValidateUser = async (setRoute, setPoints) => {
             const controller = new AbortController()
             const timeout = setTimeout(() => controller.abort(), 5000)
             const validationRequest = await fetch(SERVER + "/Validate",{
@@ -125,7 +127,9 @@ const ValidateUser = async (setRoute) => {
             clearTimeout(timeout)
             console.log(responseData.message)
             if (responseData.message === "VALID"){
+                
                 toast.info("Signed In")
+                getPoints(setPoints)
                 setRoute("Home")
             }
             else{

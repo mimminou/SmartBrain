@@ -1,8 +1,8 @@
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import useResizeObserver from "@react-hook/resize-observer"
 import { SERVER } from "../misc/Globals"
 
-const FaceRecognition = ({imgURL, imgData, setRank}) => {
+const FaceRecognition = ({imgURL, imgData,points , setPoints}) => {
   const [imgSize, setImgSize] = useState({w: 0, h:0})
   const imgAdaptiveSize = useRef(null)
   const ImageSizeObserver = useResizeObserver(imgAdaptiveSize, (element)=>{
@@ -13,20 +13,28 @@ const FaceRecognition = ({imgURL, imgData, setRank}) => {
         <div className="flex gap-4 justify-center items-center">
              <div className="max-w-[60vw] relative">
                 <img className="z-[-1] rounded" ref={imgAdaptiveSize} src={imgURL} alt=""/>
-                <FaceRectangle imgData={imgData} Img={imgSize} setRank={setRank}/>
+                <FaceRectangle imgData={imgData} Img={imgSize} points={points} setPoints={setPoints}/>
             </div>
         </div>
   )
 }
 
-const FaceRectangle = ({imgData, Img, setRank}) => {
-    if(Object.keys(imgData).length == 0 || Img.w === 0) 
+const FaceRectangle = ({imgData, Img, points, setPoints}) => {
+    useEffect(() => {
+        //Check if imgData even exists before trying to access it
+        if (imgData && Object.keys(imgData).length > 0) {
+            setPoints(imgData.faces.length + Number(points))
+        }
+    },[imgData]) //needed to avoid useEffect bomb, only update if "imgData" has changed, otherwise keep stuff as is
+    //this is basically decoupling the front end from the backend to make the updated number not wait until a GET request is asked everytime a photo is uploaded 
+    //this is also done because I made the backend responsible for updating user scores only depending on the image they sent, to avoid score manipulation
+    //a score is how many faces were detected, and since the backend gets this information on it's own by analyzing the image, it can update a user's score directly
+    // edit: I did not invent this, apparently it's called Optimistic UI, I mean of course someone else has done it, but cool enough
+    if(Object.keys(imgData).length == 0 || Img.w === 0 ) 
         return null
     
     const faces = imgData.faces
-    let facesNumber = 0
     const boxFace = faces.map((face, index) => {
-        facesNumber += index
         const width = Math.round(face.w* Img.w*0.01 + 10)
         const height = Math.round(face.h* Img.h*0.01+ 10)
         const tx = Math.round(face.center.x* Img.w*0.01 - width/2)
@@ -39,22 +47,7 @@ const FaceRectangle = ({imgData, Img, setRank}) => {
          </div>
         )
     })
-    async () => {
-        const response = await fetch(SERVER + "/SetScore",{
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-            },
-        credentials: "include",
-        body: JSON.stringify({
-            "Score" : facesNumber
-        })
-        })
-        const responseRank = await response.json()
-        setRank(responseRank.rank)
-        console.log("Number of faces is :  :  : " + facesNumber)
-    }
-
+    console.log(faces.length)
     return(
         <>
         {
